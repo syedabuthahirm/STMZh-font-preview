@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import TextToPath from './OpenType';
 
 function addZero(char: string) {
   if (char.length == 1) {
@@ -45,6 +46,7 @@ function App() {
   }
   // @ts-ignore
   const convertedWord = window.startTextS(word);
+  console.log(convertedWord, 'convertedWord');
 
   return (
     <>
@@ -60,7 +62,19 @@ function App() {
         {fontsToLoad.map((fontIndex) => {
           const fontName = `STMZh${addZero(fontIndex.toString())}-font`;
           return (
-            <div style={{ border: '1px solid red' }}>
+            <div key={fontName} style={{ border: '1px solid red' }}>
+              <p>fontname: {fontName.split('-')[0]}</p>
+              <TextToPath text={convertedWord} fontName={addZero(fontIndex.toString())} fontSize={fontSize} />
+            </div>
+          )
+        })}
+      </div>
+
+      <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr' }}>
+        {fontsToLoad.map((fontIndex) => {
+          const fontName = `STMZh${addZero(fontIndex.toString())}-font`;
+          return (
+            <div key={fontName} style={{ border: '1px solid red' }}>
               <p>fontname: {fontName.split('-')[0]}</p>
               <p className={`font ${fontName}`} style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize}px`, }}>{convertedWord}</p>
             </div>
@@ -70,7 +84,7 @@ function App() {
       <footer style={{ margin: '2rem 0' }}>
         {pages.map((page) => {
           return (
-            <button style={{ background: currentPage === page ? 'blue' : 'inherit' }}
+            <button key={page} style={{ background: currentPage === page ? 'blue' : 'inherit' }}
               onClick={() => {
                 setCurrentPage(page);
                 const f = page === 28 ? range(1, 6, 1) : range(1, 11, 1);

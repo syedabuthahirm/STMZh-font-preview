@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import TextToPath from './OpenType';
+import MakerjsDemo from './Makerjs';
 
 function addZero(char: string) {
   if (char.length == 1) {
@@ -20,7 +21,7 @@ const range = (start: number, stop: number, step: number) =>
 
 const pages = range(1, 29, 1);
 function App() {
-  const [word, setWord] = useState('சையது அபுதாஹிர்');
+  const [word, setWord] = useState('அபுதாஹிர்');
   const [fontSize, setFontSize] = useState(60);
   const [currentPage, setCurrentPage] = useState(1);
   const [fontsToLoad, setFontsToLoad] = useState(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
@@ -58,6 +59,8 @@ function App() {
         <label>Text</label>
         <input type='text' value={word} onChange={onchange} />
       </div>
+      {/* <MakerjsDemo text={convertedWord} fontName="Coiny-Regular.ttf" /> */}
+      {/* <MakerjsDemo text={convertedWord} fontSize={fontSize} fontName="st-002.TTF" /> */}
       <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr' }}>
         {fontsToLoad.map((fontIndex) => {
           const fontName = `STMZh${addZero(fontIndex.toString())}-font`;

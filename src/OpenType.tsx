@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import opentype from "opentype.js";
+import { model, models } from "makerjs";
+import outline from "./utils";
 
 const TextToPath = ({ text = "வணக்கம் வணக்கம்", fontSize = 72, fontName = "001" }) => {
   const [pathData, setPathData] = useState("");
+  const [pathOuterData, setPathOuterData] = useState("");
   const svgRef = useRef(null);
   useEffect(() => {
     // Make sure the font path is correct (public folder or import)
@@ -18,7 +21,18 @@ const TextToPath = ({ text = "வணக்கம் வணக்கம்", font
         // Convert to SVG path string
         const d = path.toPathData(2); // 2 = precision
 
+        let outlined = '';
+
+        try {
+          outlined = outline(d, 6, { bezierAccuracy: 10 });
+        } catch (error) {
+          console.error(error);
+        }
+
+        console.log(outlined);
+
         setPathData(d);
+        setPathOuterData(outlined);
       }
     });
   }, [text, fontSize]);
@@ -51,7 +65,7 @@ const TextToPath = ({ text = "வணக்கம் வணக்கம்", font
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = "text.svg";
+    link.download = `st-${fontName}.svg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -62,6 +76,7 @@ const TextToPath = ({ text = "வணக்கம் வணக்கம்", font
   return (
     <div>
       <svg ref={svgRef} width="500" height="150" viewBox="0 0 500 150">
+        <path d={pathOuterData} fill="red" />
         <path d={pathData} fill="black" />
       </svg>
       <button onClick={handleCopy}>
